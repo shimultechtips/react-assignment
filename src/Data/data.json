@@ -1,0 +1,146 @@
+{
+    "items": [
+        {
+            "id": "0",
+            "categoryName": "Red",
+            "title": "Red Flower",
+            "image": "./assets/images/01.jpg",
+            "desc": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, deleniti possimus. Repudiandae, assumenda illo sed temporibus non iste, nulla quasi tenetur maiores placeat asperiores fugit amet velit earum? Nihil aperiam enim, quod ex temporibus tempora, ipsum corporis magnam quo consectetur animi voluptatem aspernatur facere doloribus eum nam et earum iure!",
+            "details": "demo details 0",
+            "remainAmount": 1,
+            "totalAmount": 5,
+            "price": 270
+        },
+        {
+            "id": "1",
+            "categoryName": "Green",
+            "title": "Green Flower",
+            "image": "./assets/images/02.jpg",
+            "desc": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla, quam quaerat optio error aliquam alias iusto tempora quis quo inventore ex, modi pariatur atque placeat qui molestias reprehenderit, recusandae voluptates possimus! Eius iusto debitis unde numquam? Odio voluptates placeat, natus corporis quibusdam culpa magnam nesciunt harum laudantium quasi, voluptas quaerat?",
+            "details": "demo details 1",
+            "remainAmount": 2,
+            "totalAmount": 5,
+            "price": 260
+        },
+        {
+            "id": "2",
+            "categoryName": "Blue",
+            "title": "Blue Flower",
+            "image": "https://images.pexels.com/photos/56866/garden-rose-red-pink-56866.jpeg",
+            "desc": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis cum ratione molestias consectetur animi, adipisci autem repellat nostrum omnis ex dolor est labore doloremque voluptatum itaque quaerat illo nisi quis. Neque quaerat eius reiciendis blanditiis necessitatibus numquam, quia officia iusto aliquid suscipit rem, aspernatur explicabo perferendis odit recusandae sapiente minus?",
+            "details": "demo details 2",
+            "remainAmount": 2,
+            "totalAmount": 5,
+            "price": 240
+        },
+        {
+            "id": "3",
+            "categoryName": "Blue",
+            "title": "Blue Flower",
+            "image": "https://picsum.photos/300/200",
+            "desc": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui velit exercitationem maxime eaque, laboriosam quod atque. Ipsum earum nisi reprehenderit soluta in, consequatur eligendi est perspiciatis. Obcaecati quis nihil officia autem exercitationem eligendi alias blanditiis temporibus impedit? Aliquam debitis, eum sint, illo quasi ut culpa quidem voluptatum delectus laboriosam architecto.",
+            "details": "demo details 3",
+            "remainAmount": 2,
+            "totalAmount": 5,
+            "price": 230
+        }
+    ],
+    "comments": [
+        {
+            "id": 0,
+            "itemId": 0,
+            "userName": "demo user",
+            "comment": "demo Comment",
+            "date": "demo date"
+        },
+        {
+            "id": 1,
+            "itemId": 0,
+            "userName": "demo user 1",
+            "comment": "demo Comment 1",
+            "date": "demo date 1"
+        },
+        {
+            "id": 2,
+            "itemId": 1,
+            "userName": "demo user",
+            "comment": "demo Comment",
+            "date": "demo date"
+        },
+        {
+            "id": 3,
+            "itemId": 1,
+            "userName": "demo user 1",
+            "comment": "demo Comment 1",
+            "date": "demo date 1"
+        },
+        {
+            "id": 4,
+            "itemId": 2,
+            "userName": "demo user",
+            "comment": "demo Comment",
+            "date": "demo date"
+        },
+        {
+            "id": 5,
+            "itemId": 2,
+            "userName": "demo user",
+            "comment": "demo Comment",
+            "date": "demo date"
+        },
+        {
+            "id": 6,
+            "itemId": 3,
+            "userName": "demo user",
+            "comment": "demo Comment",
+            "date": "demo date"
+        },
+        {
+            "id": 7,
+            "itemId": 3,
+            "userName": "demo user",
+            "comment": "demo Comment",
+            "date": "demo date"
+        },
+        {
+            "id": 8,
+            "itemId": 4,
+            "userName": "demo user",
+            "comment": "demo Comment",
+            "date": "demo date"
+        },
+        {
+            "id": 9,
+            "itemId": 4,
+            "userName": "demo user",
+            "comment": "demo Comment",
+            "date": "demo date"
+        }
+    ],
+    "categories": [
+        {
+            "id": 0,
+            "title": "Red",
+            "image": "https://picsum.photos/1920/1080",
+            "details": "demo details 0"
+        },
+        {
+            "id": 1,
+            "title": "Green",
+            "image": "https://picsum.photos/1920/1080",
+            "details": "demo details 1"
+        },
+        {
+            "id": 2,
+            "title": "Blue",
+            "image": "https://picsum.photos/1920/1080",
+            "details": "demo details 2"
+        },
+        {
+            "id": 3,
+            "title": "White",
+            "image": "https://picsum.photos/1920/1080",
+            "details": "demo details 3"
+        }
+    ]
+}

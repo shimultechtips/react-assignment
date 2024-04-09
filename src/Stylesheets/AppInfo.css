@@ -1,0 +1,27 @@
+/* Default Version */
+.bgColor {
+    background-color: #F2F4F8;
+}
+
+.fgColor {
+    background-color: white;
+    border-radius: 10px;
+}
+
+.textColor {
+    color: rgb(0, 0, 0);
+}
+
+/* Alternate Version */
+/* .bgColor {
+    background-color: #96C2DB;
+}
+
+.fgColor {
+    background-color: White;
+    border-radius: 10px;
+}
+
+.textColor {
+    color: rgb(0, 0, 0);
+} */
