@@ -16,7 +16,8 @@ const mapStateToProps = state => {
         selectedItem: state.selectedItem,
         orderData: state.orderData,
         itemLoading: state.itemLoading,
-        items: state.items
+        items: state.items,
+        token: state.token
     }
 }
 
@@ -154,21 +155,24 @@ class ItemDetails extends Component {
                     }
                 })
             }
-
-            if (this.props.selectedItem.remainAmount !== 0) {
-                if (this.state.orderData.quantity <= 1) {
-                    document.getElementById("decreaseButton").classList.add("disabled");
-                }
-                if (this.state.orderData.quantity > 1) {
-                    document.getElementById("decreaseButton").classList.remove("disabled");
-                }
-                if (this.state.orderData.quantity === this.props.selectedItem.remainAmount) {
-                    document.getElementById("increaseButton").classList.add("disabled");
-                }
-                if (this.state.orderData.quantity < this.props.selectedItem.remainAmount) {
-                    document.getElementById("increaseButton").classList.remove("disabled");
+            if (this.props.token != null) {
+                if (this.props.selectedItem.remainAmount !== 0) {
+                    if (this.state.orderData.quantity <= 1) {
+                        document.getElementById("decreaseButton").classList.add("disabled");
+                    }
+                    if (this.state.orderData.quantity > 1) {
+                        document.getElementById("decreaseButton").classList.remove("disabled");
+                    }
+                    if (this.state.orderData.quantity === this.props.selectedItem.remainAmount) {
+                        document.getElementById("increaseButton").classList.add("disabled");
+                    }
+                    if (this.state.orderData.quantity < this.props.selectedItem.remainAmount) {
+                        document.getElementById("increaseButton").classList.remove("disabled");
+                    }
                 }
             }
+
+
         }
         else {
             this.setSelectedItem();
@@ -176,13 +180,13 @@ class ItemDetails extends Component {
     }
 
     render() {
-        let itemDetails = (
-            <div></div>
-        )
+        let itemDetails = null;
         let selectedItem = {
             title: "",
             image: ""
         };
+
+        let sellOrOutOfStockOrLogin = null;
 
         if (this.props.itemLoading === false) {
             if (this.props.selectedItem == null) {
@@ -190,33 +194,51 @@ class ItemDetails extends Component {
                     <LinkError errText="Item" />
                 )
             } else {
-                let sell = (
-                    <div>
-                        <div className='d-flex flex-wrap align-items-center'>
-                            <p style={{ fontWeight: "bold" }}>Quantity : </p>
-                            <Button id='decreaseButton' color='secondary' style={{ marginLeft: "10px" }} onClick={this.decreaseQuantity}>-</Button>
-                            <p className="border d-flex align-items-center justify-content-center " style={{ borderRadius: "5px", minWidth: "50px", height: "40px", textAlign: "center", margin: "0px 5px" }}>{this.state.orderData.quantity}</p>
-                            <Button id='increaseButton' color='secondary' onClick={this.increaseQuantity}>+</Button>
-                        </div>
-                        <br />
-                        <Link to={itemsUrl + "/" + this.props.selectedItem.id + checkoutUrl}>
-                            <Button color='success mt-2 ms-2' style={{ width: "170px" }} onClick={this.submitHandler}>Buy Now</Button>
-                        </Link>
-                        <Button color='secondary' className='ms-2 mt-2' style={{ width: "170px" }} onClick={this.goBack}> Go Back</Button>
-                    </div>
-                )
 
-                let outOfStock = (
-                    <div>
-                        <p className='bg-danger p-2 text-white' style={{ fontWeight: 'bold', fontSize: "25px", display: 'inline', border: "1px solid gray", borderRadius: "5px" }}>Out Of Stock!</p>
-                        <br />
-                        <br />
-                        <Link to={itemsUrl}>
-                            <Button color='success' className='ms-2 mt-2' style={{ width: "170px" }} >Browse Other Items</Button>
-                        </Link>
-                        <Button color='secondary' className='ms-2 mt-2' style={{ width: "170px" }} onClick={this.goBack}>Back</Button>
-                    </div>
-                )
+
+                if (this.props.selectedItem.remainAmount !== 0) {
+                    if (this.props.token != null) {
+                        sellOrOutOfStockOrLogin = (
+                            <div>
+                                <div className='d-flex flex-wrap align-items-center'>
+                                    <p style={{ fontWeight: "bold" }}>Quantity : </p>
+                                    <Button id='decreaseButton' color='secondary' style={{ marginLeft: "10px" }} onClick={this.decreaseQuantity}>-</Button>
+                                    <p className="border d-flex align-items-center justify-content-center " style={{ borderRadius: "5px", minWidth: "50px", height: "40px", textAlign: "center", margin: "0px 5px" }}>{this.state.orderData.quantity}</p>
+                                    <Button id='increaseButton' color='secondary' onClick={this.increaseQuantity}>+</Button>
+                                </div>
+                                <br />
+                                <Link to={itemsUrl + "/" + this.props.selectedItem.id + checkoutUrl}>
+                                    <Button color='success mt-2 ms-2' style={{ width: "170px" }} onClick={this.submitHandler}>Buy Now</Button>
+                                </Link>
+                                <Button color='secondary' className='ms-2 mt-2' style={{ width: "170px" }} onClick={this.goBack}> Go Back</Button>
+                            </div>
+                        );
+                    } else {
+                        sellOrOutOfStockOrLogin = (
+                            <div>
+                                <Link to="/login">
+                                    <Button className='ms-2 mt-2' style={{ width: "170px" }} color="danger">Login To Buy</Button>
+                                </Link>
+                                <Button color='secondary' className='ms-2 mt-2' style={{ width: "170px" }} onClick={this.goBack}> Go Back</Button>
+                            </div>
+                        )
+                    }
+
+                } else {
+                    sellOrOutOfStockOrLogin = (
+                        <div>
+                            <p className='bg-danger p-2 text-white' style={{ fontWeight: 'bold', fontSize: "25px", display: 'inline', border: "1px solid gray", borderRadius: "5px" }}>Out Of Stock!</p>
+                            <br />
+                            <br />
+                            <Link to={itemsUrl}>
+                                <Button color='success' className='ms-2 mt-2' style={{ width: "170px" }} >Browse Other Items</Button>
+                            </Link>
+                            <Button color='secondary' className='ms-2 mt-2' style={{ width: "170px" }} onClick={this.goBack}>Back</Button>
+                        </div>
+                    );
+                }
+
+
                 itemDetails = (
                     <div style={{ minHeight: "580px" }}>
                         <div className='d-flex justify-content-center mr-auto flex-wrap'>
@@ -251,7 +273,7 @@ class ItemDetails extends Component {
                                         <span style={{ fontWeight: 'bold' }}>Last Sold : </span> {dateFormat(this.props.selectedItem.updatedTime, "dS mmmm yyyy, h:MM TT")}
                                     </p>
 
-                                    {this.props.selectedItem.remainAmount !== 0 ? sell : outOfStock}
+                                    {sellOrOutOfStockOrLogin}
 
 
                                 </div>

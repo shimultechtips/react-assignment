@@ -24,7 +24,12 @@ const INITIAL_STATE = {
     },
 
     purchaseable: false,
-    onClickCheckout: false
+    onClickCheckout: false,
+
+    token: null,
+    userId: null,
+    authLoading: false,
+    authFailedMsg: null,
 }
 
 export const reducer = (state = INITIAL_STATE, action) => {
@@ -126,6 +131,29 @@ export const reducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 orderData: action.payload,
+            }
+        case actionTypes.AUTH_SUCCESS:
+            return {
+                ...state,
+                token: action.payload.token,
+                userId: action.payload.userId,
+            }
+        case actionTypes.AUTH_LOGOUT:
+            return {
+                ...state,
+                token: null,
+                userId: null,
+                authFailedMsg: null,
+            }
+        case actionTypes.AUTH_LOADING:
+            return {
+                ...state,
+                authLoading: action.payload,
+            }
+        case actionTypes.AUTH_FAILED:
+            return {
+                ...state,
+                authFailedMsg: action.payload,
             }
         default:
             return state;

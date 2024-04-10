@@ -106,7 +106,6 @@ class CommentForm extends Component {
                     <textarea className='border p-2' style={{ width: "100%" }} name='comment' value={this.state.values.comment} placeholder='Your Comment' onChange={(e) => this.inputChangerHandler(e)}>
                     </textarea>
                     <br />
-                    <br />
                     <Button color='success' style={{ width: "170px" }} className='ms-2 mt-2' onClick={this.submitHandler}>Submit Comment</Button>
                     <Button color='secondary' style={{ width: "170px", minWidth: "120px" }} className='ms-2 mt-2' onClick={this.cancelComment}>Clear Fields</Button>
                 </div>

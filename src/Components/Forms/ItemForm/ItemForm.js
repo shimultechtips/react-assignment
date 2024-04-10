@@ -8,14 +8,16 @@ import { baseUrl, categoriesUrl, extensionFormat, itemsUrl, ordersUrl } from '..
 
 const mapStateToProps = state => {
     return {
-        isLoading: state.isLoading
+        isLoading: state.isLoading,
+        categories: state.categories,
+        categoryLoading: state.categoryLoading
     }
 }
 
 class ItemForm extends Component {
     state = {
         values: {
-            categoryName: "",
+            categoryName: "Blue",
             title: "",
             image: "",
             desc: "",
@@ -86,6 +88,16 @@ class ItemForm extends Component {
     }
 
     render() {
+        let categoryOptions;
+
+        if (this.props.categoryLoading === false) {
+            categoryOptions = this.props.categories.map(category => {
+                return (
+                    <option key={Math.random()} value={category.title}>{category.title}</option>
+                )
+            })
+        }
+
         let form = (
             <div className='textColor'>
                 <h4 style={{ textAlign: "center", margin: "5px" }}>Create Item As You Need :</h4>
@@ -97,19 +109,17 @@ class ItemForm extends Component {
                         <br />
                         <input name='details' className='form-control' value={this.state.values.details} placeholder='Details' onChange={(e) => this.inputChangerHandler(e)} />
                         <br />
-                        <input name='categoryName' className='form-control' value={this.state.values.categoryName} placeholder='Category Name' onChange={(e) => this.inputChangerHandler(e)} />
+                        {/* <input name='categoryName' className='form-control' value={this.state.values.categoryName} placeholder='Category Name' onChange={(e) => this.inputChangerHandler(e)} />
+                        <br /> */}
+                        <select name="categoryName" className='form-control' value={this.state.values.categoryName} onChange={(e) => this.inputChangerHandler(e)} >
+                            {categoryOptions}
+                        </select>
                         <br />
-                        <input name='price' className='form-control' value={this.state.values.price} placeholder='Price' onChange={(e) => this.inputChangerHandler(e)} />
+                        <input type='number' name='price' className='form-control' value={this.state.values.price} placeholder='Price' onChange={(e) => this.inputChangerHandler(e)} />
                         <br />
-                        <input name='remainAmount' className='form-control' value={this.state.values.remainAmount} placeholder='Remaining Amount' onChange={(e) => this.inputChangerHandler(e)} />
+                        <input type='number' name='remainAmount' className='form-control' value={this.state.values.remainAmount} placeholder='Remaining Amount' onChange={(e) => this.inputChangerHandler(e)} />
                         <br />
-                        <input name='totalAmount' className='form-control' value={this.state.values.totalAmount} placeholder='Total Amount' onChange={(e) => this.inputChangerHandler(e)} />
-
-
-                        {/* <select name="paymentType" className='form-control' value={this.state.values.paymentType} onChange={(e) => this.inputChangerHandler(e)} >
-                            <option value="Cash On Delivery">Cash On Delivery</option>
-                            <option value="Bkash">Bkash</option>
-                        </select> */}
+                        <input type='number' name='totalAmount' className='form-control' value={this.state.values.totalAmount} placeholder='Total Amount' onChange={(e) => this.inputChangerHandler(e)} />
                         <br />
                         <textarea className='border p-2' style={{ width: "100%" }} name='desc' value={this.state.values.desc} placeholder='Description' onChange={(e) => this.inputChangerHandler(e)}>
                         </textarea>

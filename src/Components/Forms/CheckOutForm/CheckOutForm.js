@@ -13,7 +13,9 @@ const mapStateToProps = state => {
         selectedItem: state.selectedItem,
         itemLoading: state.itemLoading,
         orderData: state.orderData,
-        items: state.items
+        items: state.items,
+        userId: state.userId,
+        token: state.token
     }
 }
 
@@ -31,7 +33,8 @@ class CheckOutForm extends Component {
             phone: "",
             paymentType: "Cash On Delivery"
         },
-        orderData: {}
+        orderData: {},
+        validationErr: ""
     }
 
     goBack = () => {
@@ -60,68 +63,78 @@ class CheckOutForm extends Component {
     }
 
     submitHandler = () => {
-        this.setState({
-            isLoading: true
-        })
-        const order = {
-            customer: this.state.values,
-            orderTime: new Date(),
-            item: {
-                id: this.props.selectedItem.id,
-                categoryName: this.props.selectedItem.categoryName,
-                title: this.props.selectedItem.title,
-                image: this.props.selectedItem.image,
-                details: this.props.selectedItem.details,
-                totalPayable: this.props.orderData.totalPayable,
-                quantity: this.props.orderData.quantity
-            }
-        }
+        let numberExp = /^(\+)?(88)?01[0-9]{9}$/;
+        if (this.state.values.deliveryAddress !== "" && numberExp.test(this.state.values.phone)) {
 
-        axios.post(baseUrl + ordersUrl + extensionFormat, order)
-            .then(response => {
-                if (response.status === 200) {
-                    const newItem = {
-                        ...this.props.selectedItem,
-                        remainAmount: this.props.selectedItem.remainAmount - this.props.orderData.quantity,
-                        updatedTime: new Date()
-                    }
-                    axios.put(baseUrl + itemsUrl + "/" + this.props.selectedItem.id + extensionFormat, newItem)
-                        .then(response => {
-                            if (response.status === 200) {
+            this.setState({
+                isLoading: true,
+                validationErr: ""
+            })
+            const order = {
+                customer: this.state.values,
+                orderTime: new Date(),
+                item: {
+                    id: this.props.selectedItem.id,
+                    categoryName: this.props.selectedItem.categoryName,
+                    title: this.props.selectedItem.title,
+                    image: this.props.selectedItem.image,
+                    details: this.props.selectedItem.details,
+                    totalPayable: this.props.orderData.totalPayable,
+                    quantity: this.props.orderData.quantity,
+                },
+                userId: this.props.userId,
+            }
+
+            axios.post(baseUrl + ordersUrl + extensionFormat + "?auth=" + this.props.token, order)
+                .then(response => {
+                    if (response.status === 200) {
+                        const newItem = {
+                            ...this.props.selectedItem,
+                            remainAmount: this.props.selectedItem.remainAmount - this.props.orderData.quantity,
+                            updatedTime: new Date()
+                        }
+                        axios.put(baseUrl + itemsUrl + "/" + this.props.selectedItem.id + extensionFormat, newItem)
+                            .then(response => {
+                                if (response.status === 200) {
+                                    this.setState({
+                                        isLoading: false,
+                                        isModalOpen: true,
+                                        modalMsg: "Order Placed Successfully And Item Has Been Updated!",
+                                        values: {
+                                            deliveryAddress: "",
+                                            phone: "",
+                                            paymentType: "Cash On Delivery"
+                                        }
+                                    })
+                                }
+                            })
+                            .catch(err => {
                                 this.setState({
                                     isLoading: false,
                                     isModalOpen: true,
-                                    modalMsg: "Order Placed Successfully And Item Has Been Updated!",
-                                    values: {
-                                        deliveryAddress: "",
-                                        phone: "",
-                                        paymentType: "Cash On Delivery"
-                                    }
+                                    modalMsg: "Something Went Wrong! Order Placed, But Item Isn't Updated."
                                 })
-                            }
+                            });
+                    } else {
+                        this.setState({
+                            isLoading: false,
+                            isModalOpen: true,
+                            modalMsg: "Something Went Wrong! Order Again!"
                         })
-                        .catch(err => {
-                            this.setState({
-                                isLoading: false,
-                                isModalOpen: true,
-                                modalMsg: "Something Went Wrong! Order Placed, But Item Isn't Updated."
-                            })
-                        });
-                } else {
+                    }
+                })
+                .catch(err => {
                     this.setState({
                         isLoading: false,
                         isModalOpen: true,
                         modalMsg: "Something Went Wrong! Order Again!"
                     })
-                }
+                });
+        } else {
+            this.setState({
+                validationErr: "Please Type Delivery Address And Valid Phone Number!"
             })
-            .catch(err => {
-                this.setState({
-                    isLoading: false,
-                    isModalOpen: true,
-                    modalMsg: "Something Went Wrong! Order Again!"
-                })
-            });
+        }
     }
 
     componentDidMount() {
@@ -244,7 +257,7 @@ class CheckOutForm extends Component {
                                             </textarea>
                                             <br />
                                             <br />
-                                            <input name='phone' className='form-control' value={this.state.values.phone} placeholder='Your Phone Number' onChange={(e) => this.inputChangerHandler(e)} />
+                                            <input name='phone' className='form-control' value={this.state.values.phone} placeholder='Phone (+8801xxxxxxxxx)' onChange={(e) => this.inputChangerHandler(e)} />
                                             <br />
                                             <select name="paymentType" className='form-control' value={this.state.values.paymentType} onChange={(e) => this.inputChangerHandler(e)} >
                                                 <option value="Cash On Delivery">Cash On Delivery</option>
@@ -256,6 +269,10 @@ class CheckOutForm extends Component {
                                             <Button style={{ width: "155px" }} onClick={this.goBack} color='secondary' className='ms-1'>Go Back</Button>
 
                                         </form>
+                                        <div style={{ textAlign: "center", fontWeight: 'bold', color: "orange" }}>
+                                            {this.state.validationErr}
+                                        </div>
+
                                     </div>
                                 </div >
                             </div >
@@ -269,8 +286,8 @@ class CheckOutForm extends Component {
 
         return (
             <div>
-                {this.state.isLoading ? <Spinner /> : <div></div>}
-                {form}
+                {this.state.isLoading ? <Spinner /> : form}
+
                 <Modal isOpen={this.state.isModalOpen}>
                     <ModalBody>
                         <p style={{ textAlign: 'center' }}>{this.state.modalMsg}</p>

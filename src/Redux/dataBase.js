@@ -10,6 +10,7 @@ export const categoryFormUrl = "/categoryform";
 export const formsUrl = "/forms";
 export const feedBackUrl = "/feedback";
 export const loginUrl = "/login";
+export const logoutUrl = "/logout";
 
 // export const baseUrl = "http://localhost:3001/";
 // export const extension = "";
