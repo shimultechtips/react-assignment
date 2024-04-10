@@ -4,10 +4,12 @@ import CommentForm from '../../Forms/CommentForm/CommentForm';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import { Link } from "react-router-dom";
+import Spinner from '../../Spinner/Spinner';
 
 const mapStateToProps = state => {
     return {
-        token: state.token
+        token: state.token,
+        commentSubmitLoading: state.commentSubmitLoading
     }
 }
 
@@ -48,7 +50,7 @@ class Comments extends Component {
             <div>
                 <h5 style={{ fontWeight: 'bold' }}>Comments:</h5>
 
-                {commentForm}
+                {this.props.commentSubmitLoading ? <Spinner /> : commentForm}
 
                 <div className='m-2' style={{ border: "1px solid gray", borderRadius: "5px" }}>
                     {loadComment}

@@ -1,139 +1,113 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, ModalBody } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import { baseUrl, categoriesUrl, commentsUrl, extensionFormat, itemsUrl, ordersUrl } from '../../../Redux/dataBase';
-import axios from 'axios';
+import { Button, Alert } from 'reactstrap';
 import Spinner from '../../Spinner/Spinner';
-import { fetchComments } from '../../../Redux/actionCreators';
+import { submitComment } from '../../../Redux/actionCreators';
+import { Formik } from 'formik';
 
 const mapStateToProps = state => {
     return {
         selectedItem: state.selectedItem,
-        isLoading: state.isLoading,
-        comments: state.comments
+        commentSubmitFailedMsg: state.commentSubmitFailedMsg,
+        commentSubmitLoading: state.commentSubmitLoading,
+        commentSubmitSuccess: state.commentSubmitSuccess
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchComments: () => dispatch(fetchComments())
+        submitComment: (userName, userComment, itemId) => dispatch(submitComment(userName, userComment, itemId))
     }
 }
 
 class CommentForm extends Component {
     state = {
-        values: {
-            userName: "",
-            comment: ""
-        }
+        isModalOpen: false,
+        modalMsg: ""
     }
 
     closeModal = () => {
         this.setState({
-            isModalOpen: false
+            isModalOpen: false,
+
         });
     }
 
-    inputChangerHandler = (e) => {
-        this.setState({
-            values: {
-                ...this.state.values,
-                [e.target.name]: e.target.value,
+    render() {
 
-            }
-        })
-    }
-
-    submitHandler = () => {
-        this.setState({
-            isLoading: true
-        })
-
-        const comment = {
-            itemId: this.props.selectedItem.id,
-            userName: this.state.values.userName,
-            comment: this.state.values.comment,
-            addTime: new Date(),
+        let msg = null;
+        if (this.props.commentSubmitFailedMsg != null) {
+            msg = <Alert color="danger">{this.props.commentSubmitFailedMsg}</Alert>
         }
 
-        axios.post(baseUrl + commentsUrl + extensionFormat, comment)
-            .then(response => {
-                if (response.status === 200) {
-                    this.setState({
-                        isLoading: false,
-                        isModalOpen: true,
-                        modalMsg: "Comment Submitted Successfully!",
-                        values: {
-                            userName: "",
-                            comment: ""
-                        }
-                    });
+        if (this.props.commentSubmitSuccess != null) {
+            msg = <Alert color="success">{this.props.commentSubmitSuccess}</Alert>
+        }
 
-                    this.props.fetchComments();
-                } else {
-                    this.setState({
-                        isLoading: false,
-                        isModalOpen: true,
-                        modalMsg: "Something Went Wrong! Submit Again!"
-                    })
-                }
-            })
-            .catch(err => {
-                this.setState({
-                    isLoading: false,
-                    isModalOpen: true,
-                    modalMsg: "Something Went Wrong! Submit Again!"
-                })
-            });
-    }
+        let form = null;
+        if (this.props.commentSubmitLoading) {
+            form = <Spinner />
+        } else {
+            form = (<Formik
+                initialValues={{
+                    name: "",
+                    comment: ""
+                }}
+                onSubmit={
+                    (values) => {
+                        this.props.submitComment(values.name, values.comment, this.props.selectedItem.id);
 
-    cancelComment = () => {
-        this.setState({
-            values: {
-                userName: "",
-                comment: ""
-            }
-        })
-    }
+                    }}
 
-    render() {
-        let form = (
-            <div>
-                <div className='m-2 p-2' style={{ minWidth: "350px", border: "1px solid gray", borderRadius: "5px" }}>
-                    <input name='userName' className='form-control' value={this.state.values.userName} placeholder='Your Name' onChange={(e) => this.inputChangerHandler(e)} />
-                    <br />
-                    <textarea className='border p-2' style={{ width: "100%" }} name='comment' value={this.state.values.comment} placeholder='Your Comment' onChange={(e) => this.inputChangerHandler(e)}>
-                    </textarea>
-                    <br />
-                    <Button color='success' style={{ width: "170px" }} className='ms-2 mt-2' onClick={this.submitHandler}>Submit Comment</Button>
-                    <Button color='secondary' style={{ width: "170px", minWidth: "120px" }} className='ms-2 mt-2' onClick={this.cancelComment}>Clear Fields</Button>
-                </div>
-            </div >
-        )
+                validate={(values) => {
+                    const errors = {};
 
-        return (
-            <div>
-                {this.state.isLoading ? <Spinner /> : form}
-                <Modal isOpen={this.state.isModalOpen} onClick={this.goBack}>
-                    <ModalBody>
-                        <p style={{ textAlign: 'center' }}>{this.state.modalMsg}</p>
-                        <div className='d-flex justify-content-center mr-auto flex-wrap'>
-                            <Link to={ordersUrl}>
-                                <Button color='secondary' className='m-1' onClick={this.closeModal}>Orders</Button>
-                            </Link>
-                            <Link to={itemsUrl}>
-                                <Button color='secondary' className='m-1' onClick={this.closeModal}>Items</Button>
-                            </Link>
-                            <Link to={categoriesUrl}>
-                                <Button color='secondary' className='m-1' onClick={this.closeModal}>Categories</Button>
-                            </Link>
-                            <Button color='secondary' className='m-1' onClick={this.closeModal}>Close</Button>
-                        </div>
-                    </ModalBody>
-                </Modal>
-            </div>
-        )
+                    if (!values.name) {
+                        errors.name = "Required"
+                    } else if (values.name.length < 3) {
+                        errors.name = "Must Be 3 Or More Characters!"
+                    }
+
+                    if (!values.comment) {
+                        errors.comment = "Required"
+                    } else if (values.comment.length < 15) {
+                        errors.comment = "Must Be 15 Or More Characters!"
+                    }
+
+                    return errors;
+                }}
+            >
+                {({ values, handleSubmit, handleChange, handleBlur, errors, touched }) => (
+                    <div className='p-2' style={{
+                        border: "1px solid gray",
+                        padding: "15px",
+                        borderRadius: "5px"
+                    }}>
+                        <form onSubmit={handleSubmit}>
+                            <input className='border p-2' style={{ width: "100%", borderRadius: "5px" }} name='name' placeholder='Enter Your Name!' value={values.name} onChange={handleChange} onBlur={handleBlur}
+                            />
+                            <br />
+                            {touched.name && errors.name ? <span style={{ color: "red" }}>{errors.name}</span> : null}
+                            <br />
+                            <textarea className='border p-2' style={{ width: "100%", borderRadius: "5px" }} name='comment' placeholder='Enter Your Comment!' value={values.comment} onChange={handleChange} onBlur={handleBlur} />
+                            <br />
+                            {touched.comment && errors.comment ? <span style={{ color: "red" }}>{errors.comment}</span> : null}
+                            <br />
+                            <Button style={{ width: "170px" }} type='submit' className='btn btn-success'>Submit Comment</Button>
+                        </form>
+                    </div>
+                )}
+            </Formik>)
+
+            return (
+                <div>
+                    <div className='p-2'>
+                        {msg}
+                        {form}
+                    </div>
+                </div >
+            )
+        }
     }
 }
 

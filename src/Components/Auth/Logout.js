@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { logout } from '../../Redux/actionCreators';
 import { connect } from 'react-redux';
-import { Route, Navigate, Routes } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const mapDispatchToProps = disptch => {
     return {

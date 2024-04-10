@@ -30,6 +30,14 @@ const INITIAL_STATE = {
     userId: null,
     authLoading: false,
     authFailedMsg: null,
+
+    commentSubmitFailedMsg: null,
+    commentSubmitSuccess: null,
+    commentSubmitLoading: false,
+
+    checkoutLoading: false,
+    checkoutSuccess: null,
+    checkoutFailed: null
 }
 
 export const reducer = (state = INITIAL_STATE, action) => {
@@ -43,7 +51,6 @@ export const reducer = (state = INITIAL_STATE, action) => {
                     id: key,
                 })
             }
-
             return {
                 ...state,
                 items: items,
@@ -154,6 +161,36 @@ export const reducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 authFailedMsg: action.payload,
+            }
+        case actionTypes.COMMENT_SUBMIT_FAILED:
+            return {
+                ...state,
+                commentSubmitFailedMsg: action.payload,
+            }
+        case actionTypes.COMMENT_SUBMIT_SUCCESS:
+            return {
+                ...state,
+                commentSubmitSuccess: action.payload
+            }
+        case actionTypes.COMMENT_SUBMIT_LOADING:
+            return {
+                ...state,
+                commentSubmitLoading: action.payload,
+            }
+        case actionTypes.CHECKOUT_FAILED:
+            return {
+                ...state,
+                checkoutFailed: action.payload,
+            }
+        case actionTypes.CHECKOUT_SUCCESS:
+            return {
+                ...state,
+                checkoutSuccess: action.payload
+            }
+        case actionTypes.CHECKOUT_LOADING:
+            return {
+                ...state,
+                checkoutLoading: action.payload,
             }
         default:
             return state;

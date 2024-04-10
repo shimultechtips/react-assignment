@@ -9,14 +9,13 @@ import CategoryItems from './Categories/CategoryItems/CategoryItems';
 import Items from './Items/Items';
 import { authCheck, fetchCategories, fetchComments, fetchItems } from '../Redux/actionCreators';
 import Home from './Home/Home';
-import FeedBackForm from './Forms/FeedBackForm/FeedBackForm';
 import Forms from './Forms/Forms';
 import ItemForm from './Forms/ItemForm/ItemForm';
 import CheckOutForm from './Forms/CheckOutForm/CheckOutForm';
 import Orders from './Orders/Orders';
 import CategoryForm from './Forms/CategoryForm/CategoryForm';
 import Logout from './Auth/Logout';
-import { categoriesUrl, categoryFormUrl, checkoutUrl, feedBackUrl, formsUrl, itemFormUrl, itemsUrl, loginUrl, logoutUrl, ordersUrl } from '../Redux/dataBase';
+import { categoriesUrl, categoryFormUrl, checkoutUrl, formsUrl, itemFormUrl, itemsUrl, loginUrl, logoutUrl, ordersUrl } from '../Redux/dataBase';
 import Auth from './Auth/Auth';
 
 const mapStateToProps = state => {
@@ -56,7 +55,6 @@ export class Main extends Component {
                     <Route path='/' element={<Home />}></Route>
                     <Route path={itemsUrl} element={<Items />}></Route>
                     <Route path={categoriesUrl} element={<Categories />}></Route>
-                    <Route path={feedBackUrl} element={<FeedBackForm />}></Route>
                     <Route path={itemsUrl + '/:id'} element={<ItemDetails />}></Route>
                     <Route path={categoriesUrl + '/:id'} element={<CategoryItems />}></Route>
                     <Route path={loginUrl} element={<Auth />}></Route>
@@ -73,7 +71,6 @@ export class Main extends Component {
                     <Route path={itemFormUrl} element={<ItemForm />}></Route>
                     <Route path={categoryFormUrl} element={<CategoryForm />}></Route>
                     <Route path={categoriesUrl} element={<Categories />}></Route>
-                    <Route path={feedBackUrl} element={<FeedBackForm />}></Route>
                     <Route path={itemsUrl + '/:id' + checkoutUrl} element={<CheckOutForm />}></Route>
                     <Route path={itemsUrl + '/:id'} element={<ItemDetails />}></Route>
                     <Route path={categoriesUrl + '/:id'} element={<CategoryItems />}></Route>

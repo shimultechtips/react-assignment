@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Collapse, Nav, NavItem, Navbar, NavbarBrand, NavbarToggler } from "reactstrap";
-import { categoriesUrl, feedBackUrl, formsUrl, itemsUrl, loginUrl, logoutUrl, ordersUrl } from '../../Redux/dataBase';
+import { categoriesUrl, formsUrl, itemsUrl, loginUrl, logoutUrl, ordersUrl } from '../../Redux/dataBase';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
@@ -41,9 +41,6 @@ const Header = props => {
                 <Link to={categoriesUrl} className="nav-link">Categories</Link>
             </NavItem>
             <NavItem>
-                <Link to={feedBackUrl} className="nav-link">Feedback</Link>
-            </NavItem>
-            <NavItem>
                 <Link to={loginUrl} className="nav-link">Login</Link>
             </NavItem>
         </Nav>)
@@ -59,9 +56,6 @@ const Header = props => {
                 {userIdMatched}
                 <NavItem>
                     <Link to={categoriesUrl} className="nav-link">Categories</Link>
-                </NavItem>
-                <NavItem>
-                    <Link to={feedBackUrl} className="nav-link">Feedback</Link>
                 </NavItem>
                 <NavItem>
                     <Link to={ordersUrl} className="nav-link">Orders</Link>

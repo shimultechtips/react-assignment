@@ -196,6 +196,118 @@ export const authCheck = () => dispatch => {
             const userId = localStorage.getItem('userId');
             dispatch(authSuccess(token, userId));
         }
-
     }
 }
+
+export const submitComment = (userName, userComment, itemId) => dispatch => {
+    dispatch(commentSubmitLoading(true));
+    const comment = {
+        itemId: itemId,
+        userName: userName,
+        comment: userComment,
+        addTime: new Date(),
+    }
+
+    axios.post(baseUrl + commentsUrl + extensionFormat, comment)
+        .then(response => {
+            if (response.status === 200) {
+                dispatch(commentSubmitLoading(false));
+                dispatch(fetchComments());
+                dispatch(commentSubmitSuccess("Comment Submitted Successfully!"));
+                setTimeout(() => dispatch(commentSubmitSuccess(null)), 3000);
+                setTimeout(() => dispatch(commentSubmitFailed(null)), 3000);
+            }
+        })
+        .catch(err => {
+            dispatch(commentSubmitSuccess(null));
+            dispatch(commentSubmitLoading(false));
+            dispatch(commentSubmitFailed(err.message));
+            setTimeout(() => dispatch(commentSubmitSuccess(null)), 3000);
+            setTimeout(() => dispatch(commentSubmitFailed(null)), 3000);
+        });
+
+}
+
+export const commentSubmitLoading = isLoading => {
+    return {
+        type: actionTypes.COMMENT_SUBMIT_LOADING,
+        payload: isLoading,
+    }
+}
+
+export const commentSubmitFailed = errMsg => {
+    return {
+        type: actionTypes.COMMENT_SUBMIT_FAILED,
+        payload: errMsg
+    }
+}
+export const commentSubmitSuccess = successMsg => {
+    return {
+        type: actionTypes.COMMENT_SUBMIT_SUCCESS,
+        payload: successMsg
+    }
+}
+
+export const checkOut = (order, token, selectedItem) => dispatch => {
+    dispatch(checkoutLoading(true));
+
+    axios.post(baseUrl + ordersUrl + extensionFormat + "?auth=" + token, order)
+        .then(response => {
+            if (response.status === 200) {
+                const newItem = {
+                    ...selectedItem,
+                    remainAmount: selectedItem.remainAmount - order.item.quantity,
+                    updatedTime: new Date()
+                }
+                axios.put(baseUrl + itemsUrl + "/" + selectedItem.id + extensionFormat, newItem)
+                    .then(response => {
+                        dispatch(fetchItems());
+                        dispatch(fetchOrders());
+                        dispatch(checkoutLoading(false));
+                        dispatch(checkoutSuccess("Order Placed And Item Has Been Updated. Redirecting To Homepage!"));
+                        setTimeout(() => dispatch(checkoutSuccess(null)), 3000);
+                        setTimeout(() => dispatch(checkoutFailed(null)), 3000);
+                        setTimeout(() => window.location.reload(false), 3000);
+                    })
+                    .catch(err => {
+                        dispatch(checkoutSuccess(null));
+                        dispatch(checkoutLoading(false));
+                        dispatch(checkoutFailed(err.message));
+                        setTimeout(() => dispatch(checkoutSuccess(null)), 3000);
+                        setTimeout(() => dispatch(checkoutFailed(null)), 3000);
+                        console.log("Something Went Wrong! Order Again!");
+                    });
+            } else {
+                console.log("Something Went Wrong! Order Again!");
+            }
+        })
+        .catch(err => {
+            dispatch(checkoutSuccess(null));
+            dispatch(checkoutLoading(false));
+            dispatch(checkoutFailed(err.message));
+            setTimeout(() => dispatch(checkoutSuccess(null)), 3000);
+            setTimeout(() => dispatch(checkoutFailed(null)), 3000);
+            console.log("Something Went Wrong! Order Again!");
+        });
+}
+
+export const checkoutLoading = isLoading => {
+    return {
+        type: actionTypes.CHECKOUT_LOADING,
+        payload: isLoading,
+    }
+}
+
+export const checkoutFailed = errMsg => {
+    return {
+        type: actionTypes.CHECKOUT_FAILED,
+        payload: errMsg
+    }
+}
+export const checkoutSuccess = successMsg => {
+    return {
+        type: actionTypes.CHECKOUT_SUCCESS,
+        payload: successMsg
+    }
+}
+

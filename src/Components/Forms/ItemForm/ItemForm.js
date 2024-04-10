@@ -46,45 +46,47 @@ class ItemForm extends Component {
     }
 
     submitHandler = () => {
-        this.setState({
-            isLoading: true
-        })
+        if (this.state.values.title !== "" && this.state.values.image !== "" && this.state.values.desc !== "" && this.state.values.details !== "" && this.state.values.price !== "" && this.state.values.remainAmount !== "" && this.state.values.totalAmount !== "") {
+            this.setState({
+                isLoading: true
+            })
 
-        axios.post(baseUrl + itemsUrl + extensionFormat, this.state.values)
-            .then(response => {
-                if (response.status === 200) {
-                    this.setState({
-                        isLoading: false,
-                        isModalOpen: true,
-                        modalMsg: "Item Created Successfully!",
-                        values: {
-                            categoryName: "",
-                            title: "",
-                            image: "",
-                            desc: "",
-                            details: "",
-                            price: "",
-                            remainAmount: "",
-                            totalAmount: "",
-                            addTime: new Date(),
-                            updatedTime: new Date(),
-                        }
-                    })
-                } else {
+            axios.post(baseUrl + itemsUrl + extensionFormat, this.state.values)
+                .then(response => {
+                    if (response.status === 200) {
+                        this.setState({
+                            isLoading: false,
+                            isModalOpen: true,
+                            modalMsg: "Item Created Successfully!",
+                            values: {
+                                categoryName: "",
+                                title: "",
+                                image: "",
+                                desc: "",
+                                details: "",
+                                price: "",
+                                remainAmount: "",
+                                totalAmount: "",
+                                addTime: new Date(),
+                                updatedTime: new Date(),
+                            }
+                        })
+                    } else {
+                        this.setState({
+                            isLoading: false,
+                            isModalOpen: true,
+                            modalMsg: "Something Went Wrong! Submit Again!"
+                        })
+                    }
+                })
+                .catch(err => {
                     this.setState({
                         isLoading: false,
                         isModalOpen: true,
                         modalMsg: "Something Went Wrong! Submit Again!"
                     })
-                }
-            })
-            .catch(err => {
-                this.setState({
-                    isLoading: false,
-                    isModalOpen: true,
-                    modalMsg: "Something Went Wrong! Submit Again!"
-                })
-            });
+                });
+        }
     }
 
     render() {
