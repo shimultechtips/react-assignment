@@ -4,6 +4,7 @@ import { Button } from 'reactstrap';
 import { categoryFormUrl, itemFormUrl } from '../../Redux/dataBase';
 
 const Forms = () => {
+    document.title = "Forms - React Assignment";
     return (
         <div>
             <Link to={itemFormUrl}>

@@ -89,6 +89,8 @@ class CheckOutForm extends Component {
 
     render() {
 
+        document.title = "Checkout - React Assignment";
+
         let checkout = null;
         let msg = null;
         if (this.props.checkoutFailed != null) {

@@ -65,6 +65,7 @@ class CategoryItems extends Component {
                 )
             } else {
                 categoryName = this.props.selectedCategory.title + " Category :";
+                document.title = this.props.selectedCategory.title + " Category - React Assignment";
                 loadItems = this.props.items.map(item => {
                     if (item.categoryName === this.props.selectedCategory.title) {
                         categoryItem = item.categoryName;

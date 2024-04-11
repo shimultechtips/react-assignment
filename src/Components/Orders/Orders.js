@@ -30,6 +30,7 @@ class Orders extends Component {
     }
 
     render() {
+        document.title = "Orders - React Assignment";
 
         let orders = null;
         if (this.props.orderErr) {

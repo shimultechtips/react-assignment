@@ -195,7 +195,7 @@ class ItemDetails extends Component {
                 )
             } else {
 
-
+                document.title = this.props.selectedItem.title + " - React Assignment";
                 if (this.props.selectedItem.remainAmount !== 0) {
                     if (this.props.token != null) {
                         sellOrOutOfStockOrLogin = (

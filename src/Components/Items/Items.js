@@ -30,6 +30,8 @@ class Items extends Component {
 
     render() {
 
+        document.title = "Items - React Assignment";
+
         let items = null;
         if (this.props.itemErr) {
             items = <FetchErrors errText="Sorry! Failed To Load Items. Use Below Links To Browse Items, Categories Or Reload/Refresh After Sometime!" />

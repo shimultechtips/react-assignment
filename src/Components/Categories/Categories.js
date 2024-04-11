@@ -28,6 +28,7 @@ class Categories extends Component {
     }
 
     render() {
+        document.title = "Categories - React Assignment";
         let categories = null;
         if (this.props.categoryErr) {
             categories = <FetchErrors errText="Sorry! Failed To Load Categories. Use Below Links To Browse Items, Categories Or Reload/Refresh After Sometime!" />

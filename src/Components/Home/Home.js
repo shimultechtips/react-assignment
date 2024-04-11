@@ -27,6 +27,8 @@ class Home extends Component {
         }
     }
     render() {
+        document.title = "Home - React Assignment";
+
         return (
             <div >
                 <div>

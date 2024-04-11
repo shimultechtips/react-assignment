@@ -4,6 +4,7 @@ import { Button } from 'reactstrap'
 import { categoriesUrl, itemsUrl } from '../../Redux/dataBase'
 
 const LinkError = ({ errText }) => {
+    document.title = "Errors - React Assignment";
     return (
         <div style={{ minHeight: "580px" }}>
             <div className='col-12 bgColor fgColor' style={{

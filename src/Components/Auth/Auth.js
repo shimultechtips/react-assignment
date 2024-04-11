@@ -30,6 +30,7 @@ class Auth extends Component {
     }
 
     render() {
+        document.title = "Login - React Assignment";
 
         let err = null;
         if (this.props.authFailedMsg != null) {
